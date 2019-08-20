@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Angle Offset Study</h1>
+
+<label>angle offset<input type=range id="angleOffset" min=0 value=0.61803398875 max=1 step=0.00001 oninput="angleOffsetTextBox.value=angleOffset.value"> </label>
+&nbsp;&nbsp; <-- drag slider or...
+<br/>
+<label>angle offset<input type=text id="angleOffsetTextBox" value=0.61803398875 oninput="angleOffset.value=angleOffsetTextBox.value"> </label>
+&nbsp;&nbsp; <-- enter a number
+<br/>
+<br/>
+<br/>
+
+<table  >
+  <tr>
+    <td>
+    <canvas id="testCanvas" width="600" height="600">
+ Your browser does not support the HTML5 canvas tag.
+    </canvas>
+    </td>
+    <td valign='top' style="padding:20px">
+    Some interesting numbers:</br></br>
+    1/&phi; (1 / golden ratio): 0.61803398875</br>
+    &gamma; (Euler-Mascheroni): 0.57721566</br>
+    1/sqrt(2): 0.70710678</br>
+    1/&delta; (1 / silver ratio): 0.41421356238</br>
+    </br>
+
+    
+<script>
+
+var c = document.getElementById("testCanvas");
+var ctx = c.getContext("2d");
+ctx.globalAlpha = 0.5;
+var c_rad = document.getElementById('angleOffset');
+//var c_rad_textbox = document.getElementById('angleOffsetTextBox');
+var o_x = 300; // x coordinate of origin
+var o_y = 300;// y coordinate of origin
+
+// draw axes
+
+var axes_length = 600;
+function drawAxes(){
+    ctx.strokeStyle="gray";
+    ctx.beginPath();
+    ctx.moveTo(o_x-axes_length/2, o_y);
+    ctx.lineTo(o_x+axes_length/2, o_y);
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.moveTo(o_x, o_y-axes_length/2);
+    ctx.lineTo(o_x, o_y+axes_length/2);
+    ctx.stroke();
+    ctx.closePath();
+}
+
+
+function drawCircle(x,y, color="blue") {
+  var radius =  8;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2*Math.PI);
+  ctx.fillStyle=color;
+  ctx.fill();
+  ctx.strokeStyle="black";
+  ctx.stroke();
+
+}
+
+var angle_offset = 0.618;
+var radius_offset = 1.0;
+var angle = 0;
+var radius = 0;
+
+function animate(){
+
+    angle_offset = c_rad.value;
+    radius_offset = 50;
+    angle = 0;
+    
+    ctx.clearRect(0,0,c.width,c.height);
+
+    drawAxes();
+
+    for (i=0; i<1600; i++){
+        radius = Math.sqrt(i * radius_offset);
+     
+        angle = -(i * angle_offset)*2*Math.PI;
+
+        var x = radius*Math.cos(angle)+o_x;
+        var y = radius*Math.sin(angle)+o_y;
+        color = "rgba(211, 211, 211, 100)"
+        if (i % 3==0){
+            color="	rgba(169, 169, 169, 100)"
+        }
+        else if (i % 2==0){
+            color="rgba(255, 192, 203, 100)"
+        }
+        drawCircle(x, y, color=color);
+
+    }
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
